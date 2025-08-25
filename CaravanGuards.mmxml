@@ -1,0 +1,21 @@
+<Majesty>
+	<Mod id="{775DA406-9017-4E90-9655-0C0F7C0766F0}">
+		<DataConfiguration>
+			<Dataset base="MajestyExpansion">
+				<Load>
+					<Strings>C:\Users\iximi\Desktop\Majesty Modding\MODS\CaravanGuards\Data\Intent_Text.xml</Strings>
+					<GPL>
+						<Target>C:\Users\iximi\Desktop\Majesty Modding\MODS\CaravanGuards\CaravanGuards.bcd</Target>
+						<Source>C:\Users\iximi\Desktop\Majesty Modding\MODS\CaravanGuards\GPL\NewDecisionTrees.gpl</Source>
+						<Source>C:\Users\iximi\Desktop\Majesty Modding\MODS\CaravanGuards\GPL\modified_guard_module.gpl</Source>
+					</GPL>
+				</Load>
+			</Dataset>
+		</DataConfiguration>
+		<DisplayName lang="en_US">Caravan Guards</DisplayName>
+		<Description lang="en_US">
+			<Short>Enable Monks, Warriors, and Adepts as caravan guards</Short>
+			<Long>This mod allows Monks, Warriors, and Adepts to serve as caravan guards, providing additional protection options for your trading routes and expanding the tactical possibilities for defending your economic interests.</Long>
+		</Description>
+	</Mod>
+</Majesty>

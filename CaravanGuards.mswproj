@@ -1,0 +1,23 @@
+<Majesty>
+	<SteamWorkshop id="3554989139" visibility="Public">
+		<Title lang="en_US">Caravan Guards</Title>
+		<Description lang="en_US">In the frost-laden realms of the Northern Expansion, where trade routes wind through treacherous wilderness and the bite of winter threatens both merchant and goods alike, a new tradition has emerged among the realm's greatest heroes. No longer do Adepts, Warriors, and Monks stand idly by while vulnerable caravans brave the dangers of the wilds. These noble protectors now answer the ancient call to safeguard commerce, their skills and valor ensuring that the lifeblood of your kingdom flows unimpeded.
+
+?? **Important Compatibility Information**
+
+This mod only works with the Northern Expansion.
+
+This modification may not be compatible with other mods that alter the decision trees of:
+- **Adepts** (Magical practitioners and arcane scholars)
+- **Warriors** (Battle-hardened champions and defenders)
+- **Monks** (Spiritual warriors and mystical combatants)
+
+Special thanks to:
+- All modders who have shared their knowledge and tools
+- The passionate community members who test, provide feedback, and keep the spirit of Majesty alive</Description>
+		<ContentPath>C:\Users\iximi\Desktop\Majesty Modding\MODS\CaravanGuards</ContentPath>
+		<PreviewImagePath>C:\Users\iximi\Desktop\Majesty Modding\MODS\CaravanGuards\AdeptCaravan.jpg</PreviewImagePath>
+		<IDTag>Mod</IDTag>
+		<IDTag>Character</IDTag>
+	</SteamWorkshop>
+</Majesty>
