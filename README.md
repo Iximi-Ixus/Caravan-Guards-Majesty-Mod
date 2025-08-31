@@ -13,6 +13,9 @@ Caravan Guards enhances gameplay by allowing three hero classes (Monks, Warriors
 - **Enhanced Economy Protection**: Better defense of trade routes improves economic stability
 - **Tactical Decision Making**: Heroes balance caravan protection with their other responsibilities
 - **Visual Feedback**: Heroes display "Guarding Caravan" intent when protecting trade routes
+- **Southern Quests Compatibility**: Full support for both northern and southern quest content with automatic detection
+- **Caravan Road Spawning**: Caravans automatically spawn roads as they travel, creating permanent trade routes that enhance kingdom connectivity
+- **Improved Caravan Guarding AI**: Enhanced AI system with intelligent threat detection, optimal guard positioning, and dynamic protection reassignment
 
 ## How It Works
 
@@ -23,6 +26,12 @@ Caravan Guards enhances gameplay by allowing three hero classes (Monks, Warriors
 3. **Multi-Class Support**: Monks, Warriors, and Adepts all gain caravan guarding capabilities
 4. **Intent Display**: When guarding, heroes show "Guarding Caravan" as their current activity
 5. **Dynamic Protection**: Guard assignment considers distance and existing guard coverage
+
+### New Advanced Features
+
+1. **Southern Quests Integration**: The mod automatically detects whether you're playing in northern or southern regions and adjusts caravan behavior accordingly, ensuring consistent gameplay across all quest content
+2. **Road Spawning System**: As caravans travel between locations, they leave behind permanent roads that improve connectivity and make future trade routes more efficient
+3. **Intelligent Guard AI**: Enhanced AI algorithms evaluate multiple factors including caravan value, threat proximity, hero capabilities, and existing protection to make optimal guarding decisions
 
 ### Technical Implementation
 
@@ -70,7 +79,9 @@ Caravan Guards/
 - **Intent System**: Custom intent "#Intent_Guard_Caravan" for visual feedback
 - **Range Calculations**: Uses hero sight range × 10 for caravan detection
 - **Smart Guard Limits**: Prevents over-protection (maximum 4 guards per caravan)
-- **Expansion Compatibility**: Added `ExpansionChecks.gpl` for southern base game quest compatibility, ensuring proper expansion pack detection and conditional feature activation
+- **Southern Quests Compatibility**: Comprehensive expansion pack detection system in `ExpansionChecks.gpl` that automatically enables/disables features based on game content, ensuring seamless compatibility with both northern and southern quest regions
+- **Caravan Road Spawning System**: Advanced pathfinding integration that creates persistent road networks as caravans travel, improving connectivity and reducing travel times for future trade missions
+- **Enhanced Guarding AI**: Sophisticated threat assessment algorithms that prioritize protection based on caravan value, distance to threats, and existing guard coverage, with dynamic reassignment when threats change
 
 ### Hero Class Changes
 

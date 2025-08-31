@@ -5,7 +5,15 @@
 //Defines the intent text
 expression #Intent_Guard_Caravan "guarding_caravan"
 
-//Guard module
+//Reduce wandering distance (original SDK value is 3)
+//Try different values: 1 = close, 2 = moderate, 0.5 = very close
+expression #Def_Car_Wander_Mod 2
+
+//Thread update interval for caravan following (in milliseconds)
+expression #Caravan_Update_Interval 5000
+
+//Guard Check
+//////////////////////////////////////
 function guard_check(agent thisagent, string whattype, string whattoguard, integer chance) is Boolean
 
 declare
@@ -16,6 +24,9 @@ declare
 	integer range;
 
 begin
+	// Declare custom attribute for thread management (SDK pattern)
+	$AddAttribute(thisagent, "update_thread", "function", $update_caravan_destination);
+
 //	$debugout("Should I guard",whattoguard,"?");
 
 	if ($randomnumber(100) + 1 > chance)
@@ -24,17 +35,18 @@ begin
 			return FALSE;
 		end
 
-	range = $getattribute(thisagent,#ATTRIB_sightrange) * 10;
+	range = $getattribute(thisagent,#ATTRIB_sightrange) * 100;
 
 	//potentials = $listtitlesinRadius(thisagent,whattype,whattoguard,range);
 
+	// Find all caravans within range (filtered by title)
 	$ListObjects (ThisAgent, WhatType, Range, Potentials, #CheckTitles, WhatToGuard);
 
 	foreach diddly in potentials do
 		begin
 			//guards = $listtitlesinradius(diddly,"hero",thisagent's "title",range);
 
-			if ($ListObjects (Diddly, "Hero", Range, Guards, #CheckTitles, ThisAgent's "Title") < 4)
+			if ($ListObjects (Diddly, "Hero", 500, Guards, #CheckTitles, ThisAgent's "Title") < 3)
 				new_potentials << diddly;
 		end
 
@@ -46,7 +58,8 @@ begin
 			return FALSE;
 		end
 
-	 Best_One = $ListMember (Potentials, 1);
+	 // Select random caravan from potentials (all have < 3 guards)
+	 Best_One = $ListMember (Potentials, $RandomNumber($ListSize(Potentials)) + 1);
 	//best_one = $pick_closest(thisagent,potentials);
 
   //	if ($distanceBetweenAgents(thisagent,best_one) < (10 * $getattribute(thisagent,#ATTRIB_Sightrange)))
@@ -54,7 +67,10 @@ begin
 			thisagent's "Activescript" = $defend_object;
 			thisagent's "target" = best_one;
 			thisagent's "taskname" = "defending";
+			thisagent's "backScript" = $defend_object;  // Ensure hero returns to defending after any interruption
 			$SpecifyIntent(ThisAgent, #Intent_Guard_Caravan);
+			// Start thread to periodically update destination for moving caravan (SDK pattern)
+			$NewThread(thisagent's "update_thread", #Caravan_Update_Interval, thisagent);
 //			best_one's "num_guards" += 1;
 //			$debugout("Yes!");
 			return TRUE;
@@ -62,4 +78,95 @@ begin
 
 //	$debugout("Not near enough.");
 	return False;
+end
+
+// Update Caravan Destination Thread
+///////////////////////////////////////
+function update_caravan_destination(agent thisagent)
+
+declare
+	agent target;
+
+begin
+	target = thisagent's "target";
+
+	// Check if target is still valid
+	if ($notvalid(target))
+		begin
+			$stopmoving(thisagent);
+			$reset_tasks(thisagent);
+			if ($hasattribute("update_thread", thisagent))
+				$killthread(thisagent's "update_thread");
+			return;
+		end
+
+	// Update destination to follow moving caravan
+	thisagent's "destination" = $RandomCoord (target, $getattribute (thisagent, #ATTRIB_SightRange) * #Def_Car_Wander_Mod);
+	thisagent's "backScript" = $defend_object;  // Ensure return to defending after movement
+	$move(thisagent, thisagent's "destination");
+end
+
+// Defend Object
+/////////////////////////////////////////
+function defend_object(agent thisagent)
+
+declare
+
+	agent target;
+	integer targetrange;
+
+begin
+	target = thisagent's "target";
+
+	// is target still valid
+	if ($notvalid(target))
+		begin
+			$stopmoving(thisagent);
+			$reset_tasks(thisagent);
+			// Kill the update thread when target becomes invalid
+			if ($hasattribute("update_thread", thisagent))
+				$killthread(thisagent's "update_thread");
+		end
+	else
+		begin
+			// Always set backScript to defend_object so hero returns to task after combat
+			thisagent's "backScript" = $defend_object;
+
+			// Check for enemies nearby - if found, switch to combat mode
+			$list_enemies(thisagent, 1);
+			if ($listsize(thisagent's "Hostiles") > 0)
+				begin
+					// Enemies detected - switch to attack mode but keep backScript to return to defending
+					thisagent's "target" = $pick_closest(thisagent, thisagent's "Hostiles");
+					thisagent's "activeScript" = $attack_object;
+					thisagent's "backScript" = $defend_object;  // Return to defending after combat
+					$SpecifyIntent(ThisAgent, #Intent_fighting);
+					return;  // Exit defend_object to let attack_object handle combat
+				end
+
+			// is thisagent low on HP
+			if ($haslowHP(thisagent))
+				begin
+					$heal_self(thisagent);
+				end
+			else
+				begin
+					// is thiaagent in range of target
+					targetrange = $distanceBetweenAgents(thisagent,target);
+
+					if (targetrange > ($gettargetrange(thisagent)))
+						begin
+							// move towards target - thread handles periodic updates
+							thisagent's "destination" = $RandomCoord (Target, $getattribute (ThisAgent, #ATTRIB_SightRange) * #Def_Car_Wander_Mod);
+							thisagent's "activeScript" = $travel_to;
+							thisagent's "backScript" = $defend_object;  // Return to defending after movement
+							$move(thisagent,thisagent's "destination");
+						end
+					else
+						begin
+							// At caravan location - ready to defend
+							// backScript already set above, hero will return here after combat
+						end
+				end
+		end
 end

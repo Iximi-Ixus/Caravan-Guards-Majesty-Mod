@@ -1,0 +1,22 @@
+<Majesty>
+    <Description type="Unit" subType="Building" ID="RMK1" Name="RoadMarker" Description="Road Marker">
+        <Engine version="1">
+            <Info value="Directionless"/>
+			<Info value="DontBlock"/>
+            <Info value="ModifyTerrainTextureOnPlacement"/>
+            <Info value="ModifyTerrainHeightOnPlacement"/>
+            <CanUse value="HumanPlayer"/>
+            <Menu value="2"/>
+            <ImageIDBase value="ABk1"/>
+            <DefaultSound value="Statue"/>
+        </Engine>
+        <Game version="1">
+			<DialogID value="APb2"/>
+			<MaxHP value="10"/>
+			<SightRange value="40"/>
+			<Flags value="HasHPBar"/>
+			<HelpID value="h150"/>
+            <Flags value="NotBuildable"/>
+        </Game>
+    </Description>
+</Majesty>

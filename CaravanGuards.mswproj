@@ -1,6 +1,6 @@
 <Majesty>
 	<SteamWorkshop id="3554989139" visibility="Public">
-		<Title lang="en_US">Caravan Guards</Title>
+		<Title lang="en_US">Caravan Guards &amp; Roads</Title>
 		<Description lang="en_US">In the frost-laden realms of the Northern Expansion, where trade routes wind through treacherous wilderness and the bite of winter threatens both merchant and goods alike, a new tradition has emerged among the realm's greatest heroes. No longer do Adepts, Warriors, and Monks stand idly by while vulnerable caravans brave the dangers of the wilds. These noble protectors now answer the ancient call to safeguard commerce, their skills and valor ensuring that the lifeblood of your kingdom flows unimpeded.
 
 ?? **Important Compatibility Information**
@@ -19,5 +19,7 @@ Special thanks to:
 		<PreviewImagePath>C:\Users\iximi\Desktop\Majesty Modding\MODS\CaravanGuards\AdeptCaravan.jpg</PreviewImagePath>
 		<IDTag>Mod</IDTag>
 		<IDTag>Character</IDTag>
+		<IDTag>Original Rules</IDTag>
+		<IDTag>Northern Expansion Rules</IDTag>
 	</SteamWorkshop>
 </Majesty>

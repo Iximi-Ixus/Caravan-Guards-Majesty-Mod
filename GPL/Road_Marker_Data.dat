@@ -1,0 +1,8 @@
+[RoadMarker]
+	{Building
+		(type building)
+		(subtype color)
+		(title Statue)
+		(birthscript		RoadMarker_birth)
+	}
+[end]

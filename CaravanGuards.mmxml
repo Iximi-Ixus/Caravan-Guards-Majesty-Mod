@@ -9,14 +9,22 @@
 						<Source>C:\Users\iximi\Desktop\Majesty Modding\MODS\CaravanGuards\GPL\NewDecisionTrees.gpl</Source>
 						<Source>C:\Users\iximi\Desktop\Majesty Modding\MODS\CaravanGuards\GPL\modified_guard_module.gpl</Source>
 					</GPL>
+					<Descriptions>Data\Road_Marker_Desc.xml</Descriptions>
 					<Strings>Data\Intent_Text.xml</Strings>
+					<GPL>
+						<Target>CaravanGuards.bcd</Target>
+						<Source>GPL\NewDecisionTrees.gpl</Source>
+						<Source>GPL\modified_guard_module.gpl</Source>
+						<Source>GPL\Road_Marker_Data.dat</Source>
+						<Source>GPL\RoadSpawner.gpl</Source>
+					</GPL>
 				</Load>
 			</Dataset>
 		</DataConfiguration>
 		<DisplayName lang="en_US">Caravan Guards</DisplayName>
 		<Description lang="en_US">
-			<Short>Enable Monks, Warriors, and Adepts as caravan guards</Short>
-			<Long>This mod allows Monks, Warriors, and Adepts to serve as caravan guards, providing additional protection options for your trading routes and expanding the tactical possibilities for defending your economic interests.</Long>
+			<Short>Enable Monks, Warriors, and Adepts as caravan guards, Caravans create roads over time</Short>
+			<Long>This mod allows Monks, Warriors, and Adepts to serve as caravan guards, providing additional protection options for your trading routes. Caravans now create roads over time allowing for faster deliveries.</Long>
 		</Description>
 	</Mod>
 </Majesty>

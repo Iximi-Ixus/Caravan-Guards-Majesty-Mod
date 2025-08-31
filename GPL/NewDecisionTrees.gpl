@@ -22,7 +22,7 @@ begin
 
 	if ($rest(thisagent) == False)
 
-	if ($Guard_check(ThisAgent,"hero","caravan",50) == False)
+	if ($Guard_check(ThisAgent,"hero","caravan", 90) == False)
 
 	if ($Purchase_equipment(thisagent) == False)
 
