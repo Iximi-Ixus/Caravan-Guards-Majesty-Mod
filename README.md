@@ -70,6 +70,7 @@ Caravan Guards/
 - **Intent System**: Custom intent "#Intent_Guard_Caravan" for visual feedback
 - **Range Calculations**: Uses hero sight range × 10 for caravan detection
 - **Smart Guard Limits**: Prevents over-protection (maximum 4 guards per caravan)
+- **Expansion Compatibility**: Added `ExpansionChecks.gpl` for southern base game quest compatibility, ensuring proper expansion pack detection and conditional feature activation
 
 ### Hero Class Changes
 
