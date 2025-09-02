@@ -17,6 +17,7 @@
 						<Source>GPL\modified_guard_module.gpl</Source>
 						<Source>GPL\Road_Marker_Data.dat</Source>
 						<Source>GPL\RoadSpawner.gpl</Source>
+						<Source>GPL\ExpansionChecks.gpl</Source>
 					</GPL>
 				</Load>
 			</Dataset>

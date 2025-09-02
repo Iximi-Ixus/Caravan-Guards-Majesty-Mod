@@ -14,6 +14,27 @@ begin
 end
 
 ////////////////////////////////////////////////////////////
+//GetTruePalace Function (SDK Implementation)
+////////////////////////////////////////////////////////////
+Function GetTruePalace (agent ThisAgent) is agent
+Declare
+	list	Palaces;
+	agent Palace;
+
+Begin
+
+	$ListObjects (ThisAgent, "Building", -1, Palaces, #CheckTitles, "Palace", #MyPlayer, #NoHiddenMap);
+
+	If (ThisAgent's "Title" == "Palace")
+		Palaces << ThisAgent;
+
+	If ($ListSize (Palaces) > 0)
+		return $ListMember (Palaces, 1);
+
+	return $NullAgent ();
+End
+
+////////////////////////////////////////////////////////////
 //Check_Champion_Rewards
 ////////////////////////////////////////////////////////////
 

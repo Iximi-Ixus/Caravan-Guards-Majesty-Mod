@@ -44,7 +44,7 @@ begin
 	// Use built-in movement detection for maximum efficiency
 	if ($ismoving(thisagent))
 		begin
-			palace = $gettruepalace(thisagent);
+			palace = $GetTruePalace(thisagent);
 
 			// Check if palace is valid
 			if ($isvalidgamepiece(palace))
