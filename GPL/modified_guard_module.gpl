@@ -24,10 +24,21 @@ declare
 	integer range;
 
 begin
+	// Check if agent still exists before proceeding
+	if ($notvalid(thisagent))
+		return FALSE;
+
 	// Declare custom attribute for thread management (SDK pattern)
 	$AddAttribute(thisagent, "update_thread", "function", $update_caravan_destination);
 
 //	$debugout("Should I guard",whattoguard,"?");
+
+	// Don't start guarding if home/realm is in danger - defense takes priority
+	if ($is_in_danger(thisagent's "home", thisagent) ||
+		$is_in_danger($getpalace(thisagent), thisagent))
+		begin
+			return FALSE;
+		end
 
 	if ($randomnumber(100) + 1 > chance)
 		begin
@@ -35,7 +46,7 @@ begin
 			return FALSE;
 		end
 
-	range = $getattribute(thisagent,#ATTRIB_sightrange) * 100;
+	range = $getattribute(thisagent,#ATTRIB_sightrange) * 30;
 
 	//potentials = $listtitlesinRadius(thisagent,whattype,whattoguard,range);
 
@@ -44,9 +55,13 @@ begin
 
 	foreach diddly in potentials do
 		begin
+			// Skip if caravan no longer exists
+			if ($notvalid(diddly))
+				continue;
+
 			//guards = $listtitlesinradius(diddly,"hero",thisagent's "title",range);
 
-			if ($ListObjects (Diddly, "Hero", 500, Guards, #CheckTitles, ThisAgent's "Title") < 3)
+			if ($ListObjects (Diddly, "Hero", 1000, Guards, #CheckTitles, ThisAgent's "Title") < 3)
 				new_potentials << diddly;
 		end
 
@@ -62,12 +77,16 @@ begin
 	 Best_One = $ListMember (Potentials, $RandomNumber($ListSize(Potentials)) + 1);
 	//best_one = $pick_closest(thisagent,potentials);
 
+	// Check if selected caravan still exists
+	if ($notvalid(best_one))
+		return FALSE;
+
   //	if ($distanceBetweenAgents(thisagent,best_one) < (10 * $getattribute(thisagent,#ATTRIB_Sightrange)))
 	 //	begin
-			thisagent's "Activescript" = $defend_object;
+			thisagent's "Activescript" = $guard_caravan;
 			thisagent's "target" = best_one;
 			thisagent's "taskname" = "defending";
-			thisagent's "backScript" = $defend_object;  // Ensure hero returns to defending after any interruption
+			thisagent's "backScript" = $guard_caravan;  // Return to defending after combat victories
 			$SpecifyIntent(ThisAgent, #Intent_Guard_Caravan);
 			// Start thread to periodically update destination for moving caravan (SDK pattern)
 			$NewThread(thisagent's "update_thread", #Caravan_Update_Interval, thisagent);
@@ -80,6 +99,29 @@ begin
 	return False;
 end
 
+// Cleanup Guard State
+///////////////////////////////////////
+function cleanup_guard_state(agent thisagent)
+declare
+begin
+	// Check if agent still exists before proceeding
+	if ($notvalid(thisagent))
+		return;
+	// Kill the update thread if it exists
+	if ($hasattribute("update_thread", thisagent))
+		$killthread(thisagent's "update_thread");
+
+	// Clear guard-specific attributes to allow natural decision tree flow
+	if ($hasattribute("target", thisagent))
+		thisagent's "target" = $nullagent();
+
+	if ($hasattribute("taskname", thisagent))
+		thisagent's "taskname" = "";
+
+	// Don't set any backScript - let the built-in fleeing system handle return behavior
+	// The hero will resume normal decision tree behavior after fleeing completes
+end
+
 // Update Caravan Destination Thread
 ///////////////////////////////////////
 function update_caravan_destination(agent thisagent)
@@ -88,7 +130,24 @@ declare
 	agent target;
 
 begin
+	// Check if agent still exists before proceeding (critical for thread functions)
+	if ($notvalid(thisagent))
+		return;
+
 	target = thisagent's "target";
+
+	// Check if hero has started fleeing or defending home/realm - clean up and exit
+	if ($GetAttribute(thisagent, #ATTRIB_AIIntentionString) == #intent_flee_scared ||
+		$GetAttribute(thisagent, #ATTRIB_AIIntentionString) == #intent_flee_lowHP ||
+		$GetAttribute(thisagent, #ATTRIB_AIIntentionString) == #intent_flee ||
+		$GetAttribute(thisagent, #ATTRIB_AIIntentionString) == #intent_flee_map ||
+		$GetAttribute(thisagent, #ATTRIB_AIIntentionString) == #intent_defending_home ||
+		$GetAttribute(thisagent, #ATTRIB_AIIntentionString) == #intent_defending_palace ||
+		$GetAttribute(thisagent, #ATTRIB_AIIntentionString) == #Intent_Defending_Building)
+		begin
+			$cleanup_guard_state(thisagent);
+			return;
+		end
 
 	// Check if target is still valid
 	if ($notvalid(target))
@@ -102,13 +161,13 @@ begin
 
 	// Update destination to follow moving caravan
 	thisagent's "destination" = $RandomCoord (target, $getattribute (thisagent, #ATTRIB_SightRange) * #Def_Car_Wander_Mod);
-	thisagent's "backScript" = $defend_object;  // Ensure return to defending after movement
+	thisagent's "backScript" = $guard_caravan;  // Return to defending after movement
 	$move(thisagent, thisagent's "destination");
 end
 
-// Defend Object
+// Guard Caravan
 /////////////////////////////////////////
-function defend_object(agent thisagent)
+function guard_caravan(agent thisagent)
 
 declare
 
@@ -116,7 +175,25 @@ declare
 	integer targetrange;
 
 begin
+	// Check if agent still exists before proceeding
+	if ($notvalid(thisagent))
+		return;
+
 	target = thisagent's "target";
+
+	// Check if hero has started fleeing or defending home/realm - if so, clean up guard state
+	if ($GetAttribute(thisagent, #ATTRIB_AIIntentionString) == #intent_flee_scared ||
+		$GetAttribute(thisagent, #ATTRIB_AIIntentionString) == #intent_flee_lowHP ||
+		$GetAttribute(thisagent, #ATTRIB_AIIntentionString) == #intent_flee ||
+		$GetAttribute(thisagent, #ATTRIB_AIIntentionString) == #intent_flee_map ||
+		$GetAttribute(thisagent, #ATTRIB_AIIntentionString) == #intent_defending_home ||
+		$GetAttribute(thisagent, #ATTRIB_AIIntentionString) == #intent_defending_palace ||
+		$GetAttribute(thisagent, #ATTRIB_AIIntentionString) == #Intent_Defending_Building)
+		begin
+			// Hero is fleeing or defending home/realm - clean up guard module state
+			$cleanup_guard_state(thisagent);
+			return;  // Exit and let built-in system handle higher priority task
+		end
 
 	// is target still valid
 	if ($notvalid(target))
@@ -129,19 +206,16 @@ begin
 		end
 	else
 		begin
-			// Always set backScript to defend_object so hero returns to task after combat
-			thisagent's "backScript" = $defend_object;
-
 			// Check for enemies nearby - if found, switch to combat mode
 			$list_enemies(thisagent, 1);
 			if ($listsize(thisagent's "Hostiles") > 0)
 				begin
-					// Enemies detected - switch to attack mode but keep backScript to return to defending
+					// Enemies detected - switch to attack mode with return to defending
 					thisagent's "target" = $pick_closest(thisagent, thisagent's "Hostiles");
 					thisagent's "activeScript" = $attack_object;
-					thisagent's "backScript" = $defend_object;  // Return to defending after combat
+					thisagent's "backScript" = $guard_caravan;  // Return to defending after combat victory
 					$SpecifyIntent(ThisAgent, #Intent_fighting);
-					return;  // Exit defend_object to let attack_object handle combat
+					return;  // Exit guard_caravan to let attack_object handle combat
 				end
 
 			// is thisagent low on HP
@@ -159,13 +233,13 @@ begin
 							// move towards target - thread handles periodic updates
 							thisagent's "destination" = $RandomCoord (Target, $getattribute (ThisAgent, #ATTRIB_SightRange) * #Def_Car_Wander_Mod);
 							thisagent's "activeScript" = $travel_to;
-							thisagent's "backScript" = $defend_object;  // Return to defending after movement
+							thisagent's "backScript" = $guard_caravan;  // Return to defending after movement
 							$move(thisagent,thisagent's "destination");
 						end
 					else
 						begin
 							// At caravan location - ready to defend
-							// backScript already set above, hero will return here after combat
+							// backScript will be set above if needed
 						end
 				end
 		end

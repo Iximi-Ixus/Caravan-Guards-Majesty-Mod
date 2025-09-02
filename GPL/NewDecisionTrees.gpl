@@ -20,11 +20,11 @@ begin
 
 	if ($Defend_home(thisagent) == False)
 
-	if ($rest(thisagent) == False)
-
-	if ($Guard_check(ThisAgent,"hero","caravan", 90) == False)
+	if ($rest(thisagent) == False)	
 
 	if ($Purchase_equipment(thisagent) == False)
+
+	if ($Guard_check(ThisAgent,"hero","caravan", 90) == False)
 
 	if ($Purchase_bazaar(thisagent, 70) == False)
 
@@ -80,7 +80,7 @@ begin
 
 //	if ($Guard_check(thisagent,"hero","Healer",95) == False)
 
-	if ($Guard_check(ThisAgent,"hero","caravan",75) == False)
+	if ($Guard_check(ThisAgent,"hero","caravan",60) == False)
 
 	if ($Combat_wandering(thisagent,75) == False)
 

@@ -3,21 +3,15 @@
 		<DataConfiguration>
 			<Dataset base="Any">
 				<Load>
+					<Descriptions>C:\Users\iximi\Desktop\Majesty Modding\MODS\CaravanGuards\Data\Road_Marker_Desc.xml</Descriptions>
 					<Strings>C:\Users\iximi\Desktop\Majesty Modding\MODS\CaravanGuards\Data\Intent_Text.xml</Strings>
 					<GPL>
 						<Target>C:\Users\iximi\Desktop\Majesty Modding\MODS\CaravanGuards\CaravanGuards.bcd</Target>
 						<Source>C:\Users\iximi\Desktop\Majesty Modding\MODS\CaravanGuards\GPL\NewDecisionTrees.gpl</Source>
 						<Source>C:\Users\iximi\Desktop\Majesty Modding\MODS\CaravanGuards\GPL\modified_guard_module.gpl</Source>
-					</GPL>
-					<Descriptions>Data\Road_Marker_Desc.xml</Descriptions>
-					<Strings>Data\Intent_Text.xml</Strings>
-					<GPL>
-						<Target>CaravanGuards.bcd</Target>
-						<Source>GPL\NewDecisionTrees.gpl</Source>
-						<Source>GPL\modified_guard_module.gpl</Source>
-						<Source>GPL\Road_Marker_Data.dat</Source>
-						<Source>GPL\RoadSpawner.gpl</Source>
-						<Source>GPL\ExpansionChecks.gpl</Source>
+						<Source>C:\Users\iximi\Desktop\Majesty Modding\MODS\CaravanGuards\GPL\Road_Marker_Data.dat</Source>
+						<Source>C:\Users\iximi\Desktop\Majesty Modding\MODS\CaravanGuards\GPL\RoadSpawner.gpl</Source>
+						<Source>C:\Users\iximi\Desktop\Majesty Modding\MODS\CaravanGuards\GPL\ExpansionChecks.gpl</Source>
 					</GPL>
 				</Load>
 			</Dataset>
